@@ -1,31 +1,25 @@
 'use strict';
 
-var isString = require('is-string');
-var isNumber = require('is-number-object');
-var isBoolean = require('is-boolean-object');
-var isSymbol = require('is-symbol');
-var isBigInt = require('is-bigint');
+var isMap = require('is-map');
+var isSet = require('is-set');
+var isWeakMap = require('is-weakmap');
+var isWeakSet = require('is-weakset');
 
 /** @type {import('.')} */
-// eslint-disable-next-line consistent-return
-module.exports = function whichBoxedPrimitive(value) {
-	// eslint-disable-next-line eqeqeq
-	if (value == null || (typeof value !== 'object' && typeof value !== 'function')) {
-		return null;
+module.exports = function whichCollection(/** @type {unknown} */ value) {
+	if (value && typeof value === 'object') {
+		if (isMap(value)) {
+			return 'Map';
+		}
+		if (isSet(value)) {
+			return 'Set';
+		}
+		if (isWeakMap(value)) {
+			return 'WeakMap';
+		}
+		if (isWeakSet(value)) {
+			return 'WeakSet';
+		}
 	}
-	if (isString(value)) {
-		return 'String';
-	}
-	if (isNumber(value)) {
-		return 'Number';
-	}
-	if (isBoolean(value)) {
-		return 'Boolean';
-	}
-	if (isSymbol(value)) {
-		return 'Symbol';
-	}
-	if (isBigInt(value)) {
-		return 'BigInt';
-	}
+	return false;
 };

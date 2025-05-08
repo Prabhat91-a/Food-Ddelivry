@@ -1,5 +1,7 @@
-# which-boxed-primitive <sup>[![Version Badge][2]][1]</sup>
+# which-collection <sup>[![Version Badge][2]][1]</sup>
 
+[![github actions][actions-image]][actions-url]
+[![coverage][codecov-image]][codecov-url]
 [![dependency status][5]][6]
 [![dev dependency status][7]][8]
 [![License][license-image]][license-url]
@@ -7,67 +9,57 @@
 
 [![npm badge][11]][1]
 
-Which kind of boxed JS primitive is this? This module works cross-realm/iframe, does not depend on `instanceof` or mutable properties, and works despite ES6 Symbol.toStringTag.
+Which kind of Collection (Map, Set, WeakMap, WeakSet) is this JavaScript value? Works cross-realm, without `instanceof`, and despite Symbol.toStringTag.
 
 ## Example
 
 ```js
-var whichBoxedPrimitive = require('which-boxed-primitive');
+var whichCollection = require('which-collection');
 var assert = require('assert');
 
-// unboxed primitives return `null`
-// boxed primitives return the builtin constructor name
+assert.equal(false, whichCollection(undefined));
+assert.equal(false, whichCollection(null));
+assert.equal(false, whichCollection(false));
+assert.equal(false, whichCollection(true));
+assert.equal(false, whichCollection([]));
+assert.equal(false, whichCollection({}));
+assert.equal(false, whichCollection(/a/g));
+assert.equal(false, whichCollection(new RegExp('a', 'g')));
+assert.equal(false, whichCollection(new Date()));
+assert.equal(false, whichCollection(42));
+assert.equal(false, whichCollection(NaN));
+assert.equal(false, whichCollection(Infinity));
+assert.equal(false, whichCollection(new Number(42)));
+assert.equal(false, whichCollection(42n));
+assert.equal(false, whichCollection(Object(42n)));
+assert.equal(false, whichCollection('foo'));
+assert.equal(false, whichCollection(Object('foo')));
+assert.equal(false, whichCollection(function () {}));
+assert.equal(false, whichCollection(function* () {}));
+assert.equal(false, whichCollection(x => x * x));
+assert.equal(false, whichCollection([]));
 
-assert.equal(whichBoxedPrimitive(undefined), null);
-assert.equal(whichBoxedPrimitive(null), null);
-
-assert.equal(whichBoxedPrimitive(false), null);
-assert.equal(whichBoxedPrimitive(true), null);
-assert.equal(whichBoxedPrimitive(new Boolean(false)), 'Boolean');
-assert.equal(whichBoxedPrimitive(new Boolean(true)), 'Boolean');
-
-assert.equal(whichBoxedPrimitive(42), null);
-assert.equal(whichBoxedPrimitive(NaN), null);
-assert.equal(whichBoxedPrimitive(Infinity), null);
-assert.equal(whichBoxedPrimitive(new Number(42)), 'Number');
-assert.equal(whichBoxedPrimitive(new Number(NaN)), 'Number');
-assert.equal(whichBoxedPrimitive(new Number(Infinity)), 'Number');
-
-assert.equal(whichBoxedPrimitive(''), null);
-assert.equal(whichBoxedPrimitive('foo'), null);
-assert.equal(whichBoxedPrimitive(new String('')), 'String');
-assert.equal(whichBoxedPrimitive(new String('foo')), 'String');
-
-assert.equal(whichBoxedPrimitive(Symbol()), null);
-assert.equal(whichBoxedPrimitive(Object(Symbol()), 'Symbol');
-
-assert.equal(whichBoxedPrimitive(42n), null);
-assert.equal(whichBoxedPrimitive(Object(42n), 'BigInt');
-
-// non-boxed-primitive objects return `undefined`
-assert.equal(whichBoxedPrimitive([]), undefined);
-assert.equal(whichBoxedPrimitive({}), undefined);
-assert.equal(whichBoxedPrimitive(/a/g), undefined);
-assert.equal(whichBoxedPrimitive(new RegExp('a', 'g')), undefined);
-assert.equal(whichBoxedPrimitive(new Date()), undefined);
-assert.equal(whichBoxedPrimitive(function () {}), undefined);
-assert.equal(whichBoxedPrimitive(function* () {}), undefined);
-assert.equal(whichBoxedPrimitive(x => x * x), undefined);
-assert.equal(whichBoxedPrimitive([]), undefined);
-
+assert.equal('Map', whichCollection(new Map()));
+assert.equal('Set', whichCollection(new Set()));
+assert.equal('WeakMap', whichCollection(new WeakMap()));
+assert.equal('WeakSet', whichCollection(new WeakSet()));
 ```
 
 ## Tests
 Simply clone the repo, `npm install`, and run `npm test`
 
-[1]: https://npmjs.org/package/which-boxed-primitive
-[2]: https://versionbadg.es/inspect-js/which-boxed-primitive.svg
-[5]: https://david-dm.org/inspect-js/which-boxed-primitive.svg
-[6]: https://david-dm.org/inspect-js/which-boxed-primitive
-[7]: https://david-dm.org/inspect-js/which-boxed-primitive/dev-status.svg
-[8]: https://david-dm.org/inspect-js/which-boxed-primitive#info=devDependencies
-[11]: https://nodei.co/npm/which-boxed-primitive.png?downloads=true&stars=true
-[license-image]: https://img.shields.io/npm/l/which-boxed-primitive.svg
+[1]: https://npmjs.org/package/which-collection
+[2]: https://versionbadg.es/inspect-js/which-collection.svg
+[5]: https://david-dm.org/inspect-js/which-collection.svg
+[6]: https://david-dm.org/inspect-js/which-collection
+[7]: https://david-dm.org/inspect-js/which-collection/dev-status.svg
+[8]: https://david-dm.org/inspect-js/which-collection#info=devDependencies
+[11]: https://nodei.co/npm/which-collection.png?downloads=true&stars=true
+[license-image]: https://img.shields.io/npm/l/which-collection.svg
 [license-url]: LICENSE
-[downloads-image]: https://img.shields.io/npm/dm/which-boxed-primitive.svg
-[downloads-url]: https://npm-stat.com/charts.html?package=which-boxed-primitive
+[downloads-image]: https://img.shields.io/npm/dm/which-collection.svg
+[downloads-url]: https://npm-stat.com/charts.html?package=which-collection
+[codecov-image]: https://codecov.io/gh/inspect-js/which-collection/branch/main/graphs/badge.svg
+[codecov-url]: https://app.codecov.io/gh/inspect-js/which-collection/
+[actions-image]: https://img.shields.io/endpoint?url=https://github-actions-badge-u3jn4tfpocch.runkit.sh/inspect-js/which-collection
+[actions-url]: https://github.com/inspect-js/which-collection/actions
