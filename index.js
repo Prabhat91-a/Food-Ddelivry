@@ -1,68 +1,31 @@
-class Node {
-	/// value;
-	/// next;
+'use strict';
 
-	constructor(value) {
-		this.value = value;
+var isString = require('is-string');
+var isNumber = require('is-number-object');
+var isBoolean = require('is-boolean-object');
+var isSymbol = require('is-symbol');
+var isBigInt = require('is-bigint');
 
-		// TODO: Remove this when targeting Node.js 12.
-		this.next = undefined;
+/** @type {import('.')} */
+// eslint-disable-next-line consistent-return
+module.exports = function whichBoxedPrimitive(value) {
+	// eslint-disable-next-line eqeqeq
+	if (value == null || (typeof value !== 'object' && typeof value !== 'function')) {
+		return null;
 	}
-}
-
-class Queue {
-	// TODO: Use private class fields when targeting Node.js 12.
-	// #_head;
-	// #_tail;
-	// #_size;
-
-	constructor() {
-		this.clear();
+	if (isString(value)) {
+		return 'String';
 	}
-
-	enqueue(value) {
-		const node = new Node(value);
-
-		if (this._head) {
-			this._tail.next = node;
-			this._tail = node;
-		} else {
-			this._head = node;
-			this._tail = node;
-		}
-
-		this._size++;
+	if (isNumber(value)) {
+		return 'Number';
 	}
-
-	dequeue() {
-		const current = this._head;
-		if (!current) {
-			return;
-		}
-
-		this._head = this._head.next;
-		this._size--;
-		return current.value;
+	if (isBoolean(value)) {
+		return 'Boolean';
 	}
-
-	clear() {
-		this._head = undefined;
-		this._tail = undefined;
-		this._size = 0;
+	if (isSymbol(value)) {
+		return 'Symbol';
 	}
-
-	get size() {
-		return this._size;
+	if (isBigInt(value)) {
+		return 'BigInt';
 	}
-
-	* [Symbol.iterator]() {
-		let current = this._head;
-
-		while (current) {
-			yield current.value;
-			current = current.next;
-		}
-	}
-}
-
-module.exports = Queue;
+};
